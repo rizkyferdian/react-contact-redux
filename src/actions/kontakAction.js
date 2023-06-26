@@ -89,7 +89,7 @@ export const addKontak = (data) => {
 
             .catch((error) => {
                 // Gagal Get Data
-                console.log('gagal Tambah data kontak: ', error);
+                console.log('gagal Tambah data: ', error);
                 dispatch({
                     type: ADD_KONTAK,
                     payload: {
