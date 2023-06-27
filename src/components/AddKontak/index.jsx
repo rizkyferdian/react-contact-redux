@@ -1,24 +1,46 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addKontak, getListKontak } from '../../actions/kontakAction'
+import { addKontak, getListKontak, updateKontak } from '../../actions/kontakAction'
 
 function AddContact() {
     const [nama, setNama] = useState('')
     const [nohp, setNohp] = useState('')
+    const [id, setId] = useState('')
 
-    const { addKontakResult } = useSelector((state) => state.KontakReducer)
+    const { addKontakResult, detailKontakResult, updateKontakResult } = useSelector((state) => state.KontakReducer)
     const dispatch = useDispatch()
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        dispatch(addKontak({ nama: nama, nohp: nohp }))
+        if (id) {
+            dispatch(updateKontak({ id: id, nama: nama, nohp: nohp }))
+        } else {
+            dispatch(addKontak({ nama: nama, nohp: nohp }))
+        }
     }
 
     useEffect(() => {
         if (addKontakResult) {
             dispatch(getListKontak())
         }
-    }, [addKontakResult])
+    }, [addKontakResult, dispatch])
+
+    useEffect(() => {
+        if (detailKontakResult) {
+            setNama(detailKontakResult.nama)
+            setNohp(detailKontakResult.nohp)
+            setId(detailKontakResult.id)
+        }
+    }, [detailKontakResult, dispatch])
+
+    useEffect(() => {
+        if (updateKontakResult) {
+            dispatch(getListKontak())
+            setNama('')
+            setNohp('')
+            setId('')
+        }
+    }, [updateKontakResult, dispatch])
 
     return (
         <>
